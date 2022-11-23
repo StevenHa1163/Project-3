@@ -12,6 +12,13 @@ function App() {
 
           <div className="delete-todo">X</div>
         </div>
+        <div className="todo is-complete">
+          <div className="checkbox"></div>
+
+          <div className="text">Get the milk</div>
+
+          <div className="delete-todo">X</div>
+        </div>
       </div>
     </div>
   );
