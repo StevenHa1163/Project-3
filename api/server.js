@@ -14,4 +14,14 @@ mongoose.connect(process.env.MONGODB_URI||"mongodb://127.0.0.1:27017/mern-todo",
     .then(() => console.log("Connected to DB"))
     .catch(console.error);
 
+const Todo = require('./models/Todo');
+
+// finds todos using md if connecting to port 3001
+app.get('/todos', async (req, res) =>{
+    const todos = await Todo.find();
+
+    // stores our todos
+    res.json(todos);
+});
+
 app.listen(3001, () => console.log("Server started on port 3001"));
