@@ -30,3 +30,44 @@ h1{
     margin-bottom: 32px;
 }
 
+h4{
+    font-size: 18px;
+    color: var(--light-alt);
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 16px;
+
+}
+
+.todo {
+position: relative;
+background-color: var(--dark);
+padding: 16px;
+border-radius: 16px;
+display: flex;
+align-items: center;
+transition: 0.5s;
+cursor: pointer;
+margin-bottom: 16px;
+}
+
+.todo:hover{
+    opacity: 0.8;
+}
+
+.todo .checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 16px;
+    border-radius: 999px;
+    background-color: var(--dark-alt);
+    transition: 0.4s;
+}
+
+.todo.is-complete .checkbox{
+    background-color: var(--primary);
+    background-image: linear-gradient(to bottom, var(--primary), var(--secondary));
+
+}
+
+
