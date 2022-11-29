@@ -23,7 +23,7 @@ function App() {
         .then(res => res.json());
 
       setTodos(todos => todos.map(todo =>{
-        if (todo._id == data._id){
+        if (todo._id === data._id){
           todo.complete = data.complete;
         }
 
@@ -40,7 +40,7 @@ function App() {
   }
 
   const addTodo = async () => {
-    const date = await fetch(API_BASE + "/todo/new", {
+    const data = await fetch(API_BASE + "/todo/new", {
       method: "Post",
       headers: {
         "Content-Type": "application/json"
