@@ -1,97 +1,94 @@
-import { useState, useEffect } from 'react';
-
-const API_BASE = "http://localhost:3001";
+import { useEffect, useState } from 'react';
+const api_base = 'http://localhost:3001';
 
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [popupActive, setPopupActive] = useState(false);
-  const [newTodo, setNewTodo] = useState("");
+	const [todos, setTodos] = useState([]);
+	const [popupActive, setPopupActive] = useState(false);
+	const [newTodo, setNewTodo] = useState("");
 
-  useEffect(() => {
-    GetTodos();
-  }, [])
+	useEffect(() => {
+		GetTodos();
+	}, []);
 
-  const GetTodos = () => {
-    fetch(API_BASE + "/todos")
-      .then(res => res.json())
-      .then(data => setTodos(data))
-      .then(err => console.error("Error: ", err))
-  }
+	const GetTodos = () => {
+		fetch(api_base + '/todos')
+			.then(res => res.json())
+			.then(data => setTodos(data))
+			.catch((err) => console.error("Error: ", err));
+	}
 
-  const completeTodo = async id =>{
-      const data = await fetch(API_BASE + "/todo/complete/" + id)
-        .then(res => res.json());
+	const completeTodo = async id => {
+		const data = await fetch(api_base + '/todo/complete/' + id).then(res => res.json());
 
-      setTodos(todos => todos.map(todo =>{
-        if (todo._id === data._id){
-          todo.complete = data.complete;
-        }
+		setTodos(todos => todos.map(todo => {
+			if (todo._id === data._id) {
+				todo.complete = data.complete;
+			}
 
-        return todo;
-      }));
-  }
+			return todo;
+		}));
+		
+	}
 
-  const deleteTodo = async id =>{
-    const data = await fetch(API_BASE + "/todo/delete/" + id, {
-      method: "DELETE"
-    }).then(res => res.json());
+	const addTodo = async () => {
+		const data = await fetch(api_base + "/todo/new", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json" 
+			},
+			body: JSON.stringify({
+				text: newTodo
+			})
+		}).then(res => res.json());
 
-      setTodos(todos => todos.filter(todo => todo._id !== data._id));   
-  }
+		setTodos([...todos, data]);
 
-  const addTodo = async () => {
-    const data = await fetch(API_BASE + "/todo/new", {
-      method: "Post",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        text: newTodo
-      })
-    }).then(res => res.json());
+		setPopupActive(false);
+		setNewTodo("");
+	}
 
-    setTodos([...todos, data]);
-    setPopupActive(false);
-    setNewTodo("");
-  }
+	const deleteTodo = async id => {
+		const data = await fetch(api_base + '/todo/delete/' + id, { method: "DELETE" }).then(res => res.json());
 
-  return (
-    <div className="App">
-      <h1>Welcome, Viewer</h1>
-      <h4>Your Tasks</h4>
+		setTodos(todos => todos.filter(todo => todo._id !== data.result._id));
+	}
 
-      <div className="todos">
-        {todos.map(todo => (
-          <div className={
-              "todo " + (todo.complete ? "is-complete" : "")
-              } key={todo._id} onClick={()=> completeTodo(todo.id)}>
-                <div className="checkbox"></div>
+	return (
+		<div className="App">
+			<h1>Welcome, Viewer</h1>
+			<h4>Your tasks</h4>
 
-                <div className="text">{todo.text}</div>
+			<div className="todos">
+				{todos.length > 0 ? todos.map(todo => (
+					<div className={
+						"todo" + (todo.complete ? " is-complete" : "")
+					} key={todo._id} onClick={() => completeTodo(todo._id)}>
+						<div className="checkbox"></div>
 
-                <div className="delete-todo" onClick={() => deleteTodo(todo._id)}>X</div>
-          </div>
-        ))}
-      </div>
+						<div className="text">{todo.text}</div>
 
-      <div className='addPopup' onClick={() => setPopupActive(true)}>+</div>
+						<div className="delete-todo" onClick={() => deleteTodo(todo._id)}>x</div>
+					</div>
+				)) : (
+					<p>You currently have no tasks</p>
+				)}
+			</div>
 
-      {popupActive ? (
-        <div className='popup'>
-          <div className="closePopup" onClick={() => setPopupActive(false)}>x</div>
-          <div className="content">
-            <h3>Add Task</h3>
-            <input
-            type="text" 
-            className="add-todo-input" 
-            onChange={e => setNewTodo(e.target.value)} 
-            value={newTodo}/>
-            <div className="button" onClick={addTodo}>Create Task</div>
-          </div>
-        </div>
-      ) : ''}
-    </div>
-  );
+			<div className="addPopup" onClick={() => setPopupActive(true)}>+</div>
+
+			{popupActive ? (
+				<div className="popup">
+					<div className="closePopup" onClick={() => setPopupActive(false)}>X</div>
+					<div className="content">
+						<h3>Add Task</h3>
+						<input type="text" className="add-todo-input" onChange={e => setNewTodo(e.target.value)} value={newTodo} />
+						<div className="button" onClick={addTodo}>Create Task</div>
+					</div>
+				</div>
+			) : ''}
+		</div>
+	);
+
 }
 
 export default App;
