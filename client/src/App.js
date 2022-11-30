@@ -49,23 +49,28 @@ function App() {
 
 	const deleteTodo = async id => {
 		const data = await fetch(api_base + '/todo/delete/' + id, { method: "DELETE" }).then(res => res.json());
-
-		setTodos(todos => todos.filter(todo => todo._id !== data.result._id));
+		console.log("data._id",data._id)
+		console.log("data.result",data.result)
+		console.log("todos", todos)
+		const newTodos = todos.filter(todo => todo._id !== data._id);
+		console.log("newTodos", newTodos)
+		setTodos(newTodos);
 	}
 
 	return (
 		<div className="App">
 			<h1>Welcome, Viewer</h1>
-			<h4>Your tasks</h4>
+			<h4>Add Task for the Host</h4>
 
 			<div className="todos">
 				{todos.length > 0 ? todos.map(todo => (
 					<div className={
 						"todo" + (todo.complete ? " is-complete" : "")
-					} key={todo._id} onClick={() => completeTodo(todo._id)}>
-						<div className="checkbox"></div>
+					} key={todo._id} >
+						<div onClick={() => completeTodo(todo._id)}><div className="checkbox"></div>
 
 						<div className="text">{todo.text}</div>
+						</div>
 
 						<div className="delete-todo" onClick={() => deleteTodo(todo._id)}>x</div>
 					</div>
@@ -80,7 +85,7 @@ function App() {
 				<div className="popup">
 					<div className="closePopup" onClick={() => setPopupActive(false)}>X</div>
 					<div className="content">
-						<h3>Add Task</h3>
+						<h3>Create Task</h3>
 						<input type="text" className="add-todo-input" onChange={e => setNewTodo(e.target.value)} value={newTodo} />
 						<div className="button" onClick={addTodo}>Create Task</div>
 					</div>
