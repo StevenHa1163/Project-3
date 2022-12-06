@@ -60,7 +60,7 @@ function App() {
 	return (
 		<div className="App">
 			<h1>Welcome, Viewer</h1>
-			<h4>Add Task for the Host</h4>
+			<h4>Add Comments for the Host</h4>
 
 			<div className="todos">
 				{todos.length > 0 ? todos.map(todo => (
@@ -75,7 +75,7 @@ function App() {
 						<div className="delete-todo" onClick={() => deleteTodo(todo._id)}>x</div>
 					</div>
 				)) : (
-					<p>You currently have no tasks</p>
+					<p>You currently have no comments</p>
 				)}
 			</div>
 
@@ -85,9 +85,9 @@ function App() {
 				<div className="popup">
 					<div className="closePopup" onClick={() => setPopupActive(false)}>X</div>
 					<div className="content">
-						<h3>Create Task</h3>
+						<h3>Create Comment</h3>
 						<input type="text" className="add-todo-input" onChange={e => setNewTodo(e.target.value)} value={newTodo} />
-						<div className="button" onClick={addTodo}>Create Task</div>
+						<div className="button" onClick={addTodo}>Create Comment</div>
 					</div>
 				</div>
 			) : ''}
